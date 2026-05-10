@@ -418,7 +418,13 @@
     @media(max-width:600px){
       .slide-arrow { display: none; }
 
-      /* less zoom on mobile so photos aren't too cropped */
+      /* match the 3:2 ratio of the 1200x800 photos — no more cropping */
+      .slide-track {
+        height: auto;
+        aspect-ratio: 3 / 2;
+      }
+
+      /* minimal Ken Burns on mobile so photos stay wide */
       .slide.active img {
         animation: kenburns-mobile 7s ease-in-out forwards;
       }
@@ -427,10 +433,10 @@
       }
       @keyframes kenburns-mobile {
         0%   { transform: scale(1)    translate(0, 0); }
-        100% { transform: scale(1.04) translate(-0.5%, -0.5%); }
+        100% { transform: scale(1.03) translate(-0.3%, -0.3%); }
       }
       @keyframes kenburns-mobile2 {
-        0%   { transform: scale(1.04) translate(0.5%, 0.5%); }
+        0%   { transform: scale(1.03) translate(0.3%, 0.3%); }
         100% { transform: scale(1)    translate(0, 0); }
       }
     }
