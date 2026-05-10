@@ -417,6 +417,22 @@
     /* ─── RESPONSIVE ─────────────────────────────────────── */
     @media(max-width:600px){
       .slide-arrow { display: none; }
+
+      /* less zoom on mobile so photos aren't too cropped */
+      .slide.active img {
+        animation: kenburns-mobile 7s ease-in-out forwards;
+      }
+      .slide:nth-child(even).active img {
+        animation: kenburns-mobile2 7s ease-in-out forwards;
+      }
+      @keyframes kenburns-mobile {
+        0%   { transform: scale(1)    translate(0, 0); }
+        100% { transform: scale(1.04) translate(-0.5%, -0.5%); }
+      }
+      @keyframes kenburns-mobile2 {
+        0%   { transform: scale(1.04) translate(0.5%, 0.5%); }
+        100% { transform: scale(1)    translate(0, 0); }
+      }
     }
   </style>
 </head>
@@ -641,10 +657,13 @@ Along mungkin tak selalu pandai tunjuk sayang, tapi dalam setiap doa along… na
 
   btn.addEventListener('click', toggleMusic);
 
-  document.addEventListener('click', function tryAutoplay() {
+  // Autoplay on first natural interaction (scroll, touch, or mouse move)
+  const autoplayEvents = ['scroll', 'touchstart', 'mousemove', 'keydown'];
+  function tryAutoplay() {
     if (!playing) toggleMusic();
-    document.removeEventListener('click', tryAutoplay);
-  }, { once: false });
+    autoplayEvents.forEach(e => window.removeEventListener(e, tryAutoplay));
+  }
+  autoplayEvents.forEach(e => window.addEventListener(e, tryAutoplay, { passive: true }));
 
   /* ── Scroll reveal ───────────────────────────────────────── */
   const obs = new IntersectionObserver(entries => {
