@@ -563,6 +563,55 @@ Along mungkin tak selalu pandai tunjuk sayang, tapi dalam setiap doa along… na
     touchX = null;
   });
 
+   /* ── Music player ────────────────────────────────────────── */
+  const audio  = document.getElementById('bg-music');
+  const btn    = document.getElementById('music-btn');
+  const icon   = btn.querySelector('.music-icon');
+  let playing  = false;
+ 
+  audio.volume = 0.35; // gentle volume
+ 
+  function fadeVolume(target, duration = 1200) {
+    const start    = audio.volume;
+    const diff     = target - start;
+    const steps    = 60;
+    const interval = duration / steps;
+    let   step     = 0;
+    const t = setInterval(() => {
+      step++;
+      audio.volume = Math.min(1, Math.max(0, start + diff * (step / steps)));
+      if (step >= steps) {
+        clearInterval(t);
+        if (target === 0) audio.pause();
+      }
+    }, interval);
+  }
+ 
+  function toggleMusic() {
+    if (!playing) {
+      audio.volume = 0;
+      audio.play().then(() => {
+        playing = true;
+        btn.classList.add('playing');
+        icon.textContent = '♬';
+        fadeVolume(0.35);
+      }).catch(() => {});
+    } else {
+      fadeVolume(0);
+      playing = false;
+      btn.classList.remove('playing');
+      icon.textContent = '♪';
+    }
+  }
+ 
+  btn.addEventListener('click', toggleMusic);
+ 
+  // Try silent autoplay on first user interaction with the page
+  document.addEventListener('click', function tryAutoplay() {
+    if (!playing) toggleMusic();
+    document.removeEventListener('click', tryAutoplay);
+  }, { once: false });
+
   /* ── Scroll reveal ───────────────────────────────────────── */
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
