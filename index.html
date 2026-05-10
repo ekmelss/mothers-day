@@ -418,10 +418,10 @@
     @media(max-width:600px){
       .slide-arrow { display: none; }
 
-      /* match the 3:2 ratio of the 1200x800 photos — no more cropping */
+      /* 66.67vw = exactly 2/3 of screen width = 3:2 ratio for 1200x800 photos */
+      /* aspect-ratio doesn't work here because slides are position:absolute */
       .slide-track {
-        height: auto;
-        aspect-ratio: 3 / 2;
+        height: 66.67vw;
       }
 
       /* minimal Ken Burns on mobile so photos stay wide */
